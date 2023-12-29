@@ -1,12 +1,18 @@
+// import model student
+const Student = require("../models/Student");
+
 // Membuat class StudentController
 class StudentController {
-    index(req, res) {
+    async index(req, res) {
+        //memanggil methode static all dengan async await.
+        const students = await Student.all();
+
         const data = {
             message: "Menampilkan semua students",
-            data: [],
+            data: students,
         };
         res.json(data);
-    }
+    };
 
     store(req, res) {
         const { nama } = req.body;
@@ -30,12 +36,15 @@ class StudentController {
     destroy(req, res) {
         const { id } = req.params;
         const data = {
-            message: `Menghapus students id ${id}`, 
+            message: `Menghapus students id ${id}`,
             data: [],
         };
         res.json(data);
     }
 }
+
+
+
 
 // Membuat object StundetController
 const object = new StudentController();
