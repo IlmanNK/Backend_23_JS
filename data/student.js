@@ -22,14 +22,14 @@ const studentData = [
     },
     {
         id: 4,
-        name: "Dika Prasetyo",
-        age: 17,
+        name: "Dhaffa",
+        age: 16,
         grade: "11 SMA",
         courses: ["Bahasa Inggris", "Kimia", "Biologi"]
     },
     {
         id: 5,
-        name: "Eka Suryadi",
+        name: "Rafi",
         age: 18,
         grade: "12 SMA",
         courses: ["Geologi", "Sosiologi", "Sejarah"]
