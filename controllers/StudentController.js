@@ -1,76 +1,111 @@
-const studentData = require('../data/student');
+// import model Student
 const Student = require('../models/Student');
 
 class StudentController {
-
-    /** 
-     * Mengambil semua data students
-    */
+    // menambahkan keyword async memberitahu proses asynchronous
     async index(req, res) {
-        // get all students
+        // memanggil method static all dengan async await
         const students = await Student.all();
 
-        const student = {
-            message: 'Menampilkan semua students',
-            data: students
+        if (students.length > 0) {
+            const data = {
+                message: "Menampilkan semua students",
+                data: students
+            };
+
+            return res.status(200).json(data);
         }
-        return res.json(student);
+        const data = {
+            message: "Students is empty",
+        }
+
+        return res.status(200).json(data);
     }
 
-    /** 
-     * Menyimpan data student baru
-    */
     async store(req, res) {
-        const studentModel = new Student();
-        const students = await studentModel.save(req.body);
-        return res.json({
-            message: `Berhasil membuat student baru`,
-            data: students
-        });
+        //memanggil method create dari model student 
+        //mengirim data dan callback
+
+        const { nama, nim, email, jurusan } = req.body;
+
+        // jika data undefined maka kirim response error
+        if (!nama || !nim || !email || !jurusan) {
+            const data = {
+                message: "Semua data harus dikirim",
+            };
+
+            return res.status(422).json(data);
+        }
+        const student = await Student.create(req.body);
+        const data = {
+            message: `Menambahkan data student`,
+            data: student,
+        };
+        return res.status(201).json(data);
     }
 
-    /** 
-     * Menampilkan data student by id
-    */
-    async show(req, res) {
-        const userId = req.params.id;
-        const student = await Student.find(userId);
-        return res.json({
-            message: `Menampilkan student dengan id ${req.params.id}`,
-            data: student
-        });
-    }
-
-    /** 
-     * Mengubah data student by id
-    */
     async update(req, res) {
-        const studentModel = new Student();
-        const userId = req.params.id;
-        const result = await studentModel.update(userId, req.body);
+        const { id } = req.params;
+        //cari id student yang ingin diupdate
+        const student = await student.find(id);
 
+        if (student) {
+            // melakukan update data
+            const student = await student.update(req, res.body);
+            const data = {
+                message: `Mengedit data students`,
+                data: student,
+            };
+            res.status(200), json(data);
+        }
+        else {
+            const data = {
+                message: `Student not found`,
+            };
 
-        return res.json({
-            message: `Mengupdate student dengan id ${req.params.id}`,
-            data: result
-        });
+            res.status(404), json(data);
+        }
     }
 
-    /** 
-     * Menghapus data student by id
-    */
     async destroy(req, res) {
-        const userId = req.params.id;
-        const studentModel = new Student();
-        const result = await studentModel.delete(userId);
+        const { id } = req.params;
+        const student = await Student.find(id);
 
-        return res.json({
-            message: `Menghapus student dengan id ${req.params.id}`,
-            data: result
-        });
+        if (student) {
+            await student.delete(id);
+            const data = {
+                message: `menghapus data students`,
+            };
+
+            res.status(200).json(data);
+        } else {
+            const data = {
+                message: `student not found`,
+            };
+            res.status(404).json(data);
+        }
+    }
+
+    async show(req, res) {
+        const { id } = req.params;
+        const student = await student.find(id);
+
+        if (student) {
+            const data = {
+                message: `menampilkan detail student`,
+                data: studen,
+            };
+            res.status(200).send(data);
+        }
+        else {
+            const data = {
+                message: `student not found`,
+            };
+
+            res.ststus(404).json(data);
+        }
     }
 }
 
-const object = new StudentController();
 
-module.exports = object;
+module.exports = new StudentController;
